@@ -1,28 +1,20 @@
 version: "3.8"
 
 services:
-  app:
-    build: .
+  nginx:
+    image: nginx:latest
     ports:
       - "8080:80"
     volumes:
       - ./src:/var/www/html
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
     depends_on:
-      - db
+      - php
 
-  db:
-    image: mysql:8.0
-    restart: always
-    environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: todo
-      MYSQL_USER: user
-      MYSQL_PASSWORD: secret
-    ports:
-      - "3306:3306"
+  php:
+    build: .
     volumes:
-      - dbdata:/var/lib/mysql
-      - ./src/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./src:/var/www/html
 
 volumes:
   dbdata:
