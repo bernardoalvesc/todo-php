@@ -1,15 +1,16 @@
 <?php
 require 'db.php';
 
-// coleta de dados
-$titulo = $_POST['titulo'] ?? '';
-$descricao = $_POST['descricao'] ?? '';
-$prioridade = $_POST['prioridade'] ?? '';
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    $titulo = $_POST["titulo"] ?? '';
+    $descricao = $_POST["descricao"] ?? '';
+    $prioridade = $_POST["prioridade"] ?? '';
 
-// se o titulo e a descrição estiverem preenchidos, insere a tarefa
+    if ($titulo && $descricao && $prioridade) {
+        $stmt = $pdo->prepare("INSERT INTO tarefas (titulo, descricao, prioridade) VALUES (?, ?, ?)");
+        $stmt->execute([$titulo, $descricao, $prioridade]);
+    }
 
-if ($titulo && $descricao) {
-  $stmt = $pdo->prepare("INSERT INTO tarefas (titulo, descricao, prioridade) VALUES (?, ?, ?)");
+    header("Location: index.php");
+    exit;
 }
-
-header('Location: index.php');
