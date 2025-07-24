@@ -66,7 +66,10 @@ $tarefas = $pdo->query("SELECT * FROM tarefas ORDER BY criada_em DESC")->fetchAl
             <h3 class="font-semibold"><?= htmlspecialchars($t['titulo']) ?></h3>
             <p class="text-sm text-gray-700"><?= htmlspecialchars($t['descricao']) ?></p>
           </div>
-          <a href="delete.php?id=<?= $t['id'] ?>" class="text-red-600 text-sm hover:underline">Excluir</a>
+        <form method="POST" action="delete.php" onsubmit="return confirm('Tem certeza que deseja excluir?');">
+          <input type="hidden" name="id" value="<?= $t['id'] ?>">
+          <button type="submit" class="text-red-600 text-sm hover:underline">Excluir</button>
+        </form>
         </li>
         <?php endforeach; ?>
       </ul>
