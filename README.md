@@ -16,3 +16,5 @@
 ### 📌 2025-07-24 - v0.2
 
 - Adição da função delete.
+- Estrutura de subtarefas aninhadas: agora é possível selecionar uma tarefa pai ao criar uma nova tarefa.
+- Interface atualizada para exibir listas aninhadas com TailwindCSS, representando a hierarquia entre tarefas e subtarefas.
