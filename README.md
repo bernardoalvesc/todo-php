@@ -13,4 +13,5 @@
 ---
 
 ### 📌 2025-07-24 - v0.2
-- em andamento...
+- Adição da função delete.
+- 
