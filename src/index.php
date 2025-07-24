@@ -1,6 +1,16 @@
 <?php
 require 'db.php';
-$tarefas = $pdo->query("SELECT * FROM tarefas ORDER BY criada_em DESC")->fetchAll(PDO::FETCH_ASSOC);
+
+// Organiza tarefas por ID e subtarefas
+$todas = $pdo->query("SELECT * FROM tarefas ORDER BY criada_em DESC")->fetchAll(PDO::FETCH_ASSOC);
+$tarefas = [];
+foreach ($todas as $t) {
+    if ($t['parent_id']) {
+        $tarefas[$t['parent_id']]['subtarefas'][] = $t;
+    } else {
+        $tarefas[$t['id']] = $t;
+    }
+}
 ?>
 
 <!DOCTYPE html>
@@ -49,6 +59,17 @@ $tarefas = $pdo->query("SELECT * FROM tarefas ORDER BY criada_em DESC")->fetchAl
           </select>
         </div>
 
+        <div>
+          <label for="parent_id" class="block font-semibold mb-1">Subtarefa de:</label>
+          <select id="parent_id" name="parent_id"
+            class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-400">
+            <option value="">Nenhuma (Tarefa principal)</option>
+            <?php foreach ($todas as $pai): ?>
+              <option value="<?= $pai['id'] ?>"><?= htmlspecialchars($pai['titulo']) ?></option>
+            <?php endforeach; ?>
+          </select>
+        </div>
+
         <button type="submit"
           class="bg-yellow-400 text-white font-semibold py-2 px-4 rounded-md w-full hover:bg-yellow-500 transition">
           Adicionar Tarefa
@@ -60,17 +81,37 @@ $tarefas = $pdo->query("SELECT * FROM tarefas ORDER BY criada_em DESC")->fetchAl
       <h2 class="text-xl font-semibold text-yellow-400 mb-4">Lista de Tarefas</h2>
       <ul class="space-y-4">
         <?php foreach ($tarefas as $t): ?>
-        <li class="flex justify-between items-start p-4 rounded-md bg-yellow-50 border-l-4
-            <?= $t['prioridade'] === 'alta' ? 'border-red-500' : ($t['prioridade'] === 'media' ? 'border-yellow-500' : 'border-green-500') ?>">
-          <div>
-            <h3 class="font-semibold"><?= htmlspecialchars($t['titulo']) ?></h3>
-            <p class="text-sm text-gray-700"><?= htmlspecialchars($t['descricao']) ?></p>
-          </div>
-        <form method="POST" action="delete.php" onsubmit="return confirm('Tem certeza que deseja excluir?');">
-          <input type="hidden" name="id" value="<?= $t['id'] ?>">
-          <button type="submit" class="text-red-600 text-sm hover:underline">Excluir</button>
-        </form>
-        </li>
+          <li class="p-4 rounded-md bg-yellow-50 border-l-4 <?= $t['prioridade'] === 'alta' ? 'border-red-500' : ($t['prioridade'] === 'media' ? 'border-yellow-500' : 'border-green-500') ?>">
+            <div class="flex justify-between items-start">
+              <div>
+                <h3 class="font-semibold"><?= htmlspecialchars($t['titulo']) ?></h3>
+                <p class="text-sm text-gray-700"><?= htmlspecialchars($t['descricao']) ?></p>
+              </div>
+              <form method="POST" action="delete.php" onsubmit="return confirm('Tem certeza que deseja excluir?');">
+                <input type="hidden" name="id" value="<?= $t['id'] ?>">
+                <button type="submit" class="text-red-600 text-sm hover:underline">Excluir</button>
+              </form>
+            </div>
+
+            <?php if (!empty($t['subtarefas'])): ?>
+              <ul class="mt-3 ml-4 space-y-2">
+                <?php foreach ($t['subtarefas'] as $sub): ?>
+                  <li class="p-3 rounded bg-white border-l-4 <?= $sub['prioridade'] === 'alta' ? 'border-red-400' : ($sub['prioridade'] === 'media' ? 'border-yellow-400' : 'border-green-400') ?>">
+                    <div class="flex justify-between items-start">
+                      <div>
+                        <h4 class="font-semibold"><?= htmlspecialchars($sub['titulo']) ?></h4>
+                        <p class="text-sm text-gray-700"><?= htmlspecialchars($sub['descricao']) ?></p>
+                      </div>
+                      <form method="POST" action="delete.php" onsubmit="return confirm('Excluir subtarefa?');">
+                        <input type="hidden" name="id" value="<?= $sub['id'] ?>">
+                        <button type="submit" class="text-red-500 text-sm hover:underline">Excluir</button>
+                      </form>
+                    </div>
+                  </li>
+                <?php endforeach; ?>
+              </ul>
+            <?php endif; ?>
+          </li>
         <?php endforeach; ?>
       </ul>
     </section>

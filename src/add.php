@@ -2,15 +2,14 @@
 require 'db.php';
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    $titulo = $_POST["titulo"] ?? '';
-    $descricao = $_POST["descricao"] ?? '';
-    $prioridade = $_POST["prioridade"] ?? '';
+  $titulo = $_POST['titulo'];
+  $descricao = $_POST['descricao'];
+  $prioridade = $_POST['prioridade'];
+  $parent_id = $_POST['parent_id'] !== '' ? $_POST['parent_id'] : null;
 
-    if ($titulo && $descricao && $prioridade) {
-        $stmt = $pdo->prepare("INSERT INTO tarefas (titulo, descricao, prioridade) VALUES (?, ?, ?)");
-        $stmt->execute([$titulo, $descricao, $prioridade]);
-    }
+  $stmt = $pdo->prepare("INSERT INTO tarefas (titulo, descricao, prioridade, parent_id) VALUES (?, ?, ?, ?)");
+  $stmt->execute([$titulo, $descricao, $prioridade, $parent_id]);
 
-    header("Location: index.php");
-    exit;
+  header("Location: index.php");
+  exit;
 }
