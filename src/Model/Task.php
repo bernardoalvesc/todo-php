@@ -7,29 +7,61 @@ use PDO;
 
 class Task
 {
-    public static function all()
+    public static function create(array $data, bool $isSubtask = false): void
     {
-        $pdo = Database::getInstance();
-        $stmt = $pdo->query("SELECT * FROM tarefas ORDER BY criada_em DESC");
+        $pdo = Database::getConnection();
+
+        if ($isSubtask) {
+            $stmt = $pdo->prepare("INSERT INTO subtasks (title, description, priority) VALUES (?, ?, ?)");
+            $stmt->execute([
+                $data['title'],
+                $data['description'],
+                $data['priority']
+            ]);
+
+            $subtaskId = $pdo->lastInsertId();
+
+            $stmtRel = $pdo->prepare("INSERT INTO task_subtask (task_id, subtask_id) VALUES (?, ?)");
+            $stmtRel->execute([$data['parent_id'], $subtaskId]);
+        } else {
+            $stmt = $pdo->prepare("INSERT INTO tasks (title, description, priority) VALUES (?, ?, ?)");
+            $stmt->execute([
+                $data['title'],
+                $data['description'],
+                $data['priority']
+            ]);
+        }
+    }
+
+    public static function all(): array
+    {
+        $pdo = Database::getConnection();
+        $stmt = $pdo->query("SELECT * FROM tasks ORDER BY created_at DESC");
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public static function create(array $data)
+    public static function getSubtasks(int $taskId): array
     {
-        $pdo = Database::getInstance();
-        $stmt = $pdo->prepare("INSERT INTO tarefas (titulo, descricao, prioridade, parent_id) VALUES (?, ?, ?, ?)");
-        return $stmt->execute([
-            $data['title'],
-            $data['description'],
-            $data['priority'],
-            $data['parent_id']
-        ]);
+        $pdo = Database::getConnection();
+        $stmt = $pdo->prepare("SELECT s.* FROM subtasks s
+                               INNER JOIN task_subtask ts ON ts.subtask_id = s.id
+                               WHERE ts.task_id = ?");
+        $stmt->execute([$taskId]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public static function delete($id)
+    public static function delete(int $id): void
     {
-        $pdo = Database::getInstance();
-        $stmt = $pdo->prepare("DELETE FROM tarefas WHERE id = ?");
-        return $stmt->execute([$id]);
+        $pdo = Database::getConnection();
+        $stmt = $pdo->prepare("DELETE FROM tasks WHERE id = ?");
+        $stmt->execute([$id]);
+    }
+
+    public static function filterByPriority(string $priority): array
+    {
+        $pdo = Database::getConnection();
+        $stmt = $pdo->prepare("SELECT * FROM tasks WHERE priority = ? ORDER BY created_at DESC");
+        $stmt->execute([$priority]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 }

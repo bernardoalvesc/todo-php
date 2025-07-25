@@ -3,23 +3,18 @@
 namespace Src\Core;
 
 use PDO;
-use PDOException;
 
 class Database
 {
-    private static ?PDO $pdo = null;
+    private static ?PDO $connection = null;
 
-    public static function getInstance(): PDO
+    public static function getConnection(): PDO
     {
-        if (self::$pdo === null) {
-            try {
-                self::$pdo = new PDO("sqlite:" . __DIR__ . "/../../../database.sqlite");
-                self::$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-            } catch (PDOException $e) {
-                die("Connection failed: " . $e->getMessage());
-            }
+        if (self::$connection === null) {
+            self::$connection = new PDO('sqlite:' . __DIR__ . '/../../database.sqlite');
+            self::$connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         }
 
-        return self::$pdo;
+        return self::$connection;
     }
 }

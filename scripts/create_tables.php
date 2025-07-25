@@ -1,10 +1,10 @@
 <?php
 
-require_once __DIR__ . '/../Core/Database.php';
+require_once __DIR__ . '/../src/Core/Database.php';
 
 use Src\Core\Database;
 
-$pdo = Database::getInstance();
+$pdo = Database::getConnection();
 
 $pdo->exec("CREATE TABLE IF NOT EXISTS tasks (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
