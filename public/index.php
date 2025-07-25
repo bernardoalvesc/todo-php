@@ -1,5 +1,6 @@
 <?php
 require 'db.php';
+require __DIR__ . '/../vendor/autoload.php';
 $tarefas = $pdo->query("SELECT * FROM tarefas ORDER BY criada_em DESC")->fetchAll(PDO::FETCH_ASSOC);
 
 function agruparPorPai(array $tarefas): array {
