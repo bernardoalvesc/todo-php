@@ -1,6 +1,6 @@
 ## 📅 Histórico de Versões
 
-### 📌 2025-07-23 - v0.1
+### ✅ 2025-07-23 - v0.1
 
 - Primeira estrutura funcional criada (PHP, SQLite e Tailwind).
 - Implementação da listagem e adição de tarefas.
@@ -13,8 +13,15 @@
 
 ---
 
-### 📌 2025-07-24 - v0.2
+### ✅ 2025-07-24 - v0.2
 
 - Adição da função delete.
 - Estrutura de subtarefas aninhadas: agora é possível selecionar uma tarefa pai ao criar uma nova tarefa.
 - Interface atualizada para exibir listas aninhadas com TailwindCSS, representando a hierarquia entre tarefas e subtarefas.
+
+### 📌 Melhorias esperadas para a v0.3
+- Deixar a adição de itens de forma recursiva.
+- Correção do banco de dados.
+- Adição de um filtro de prioridade.
+- Padronizar as variáveis e funções para o inglês.
+- Transformação para o padrão MVC + POO.
