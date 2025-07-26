@@ -29,7 +29,7 @@
 
             <?php
               $subtasks = \Src\Model\Task::getSubtasks($task['id']);
-              if ($subtasks):
+              if (is_array($subtasks) && count($subtasks) > 0):
             ?>
               <ul class="mt-2 ml-4 list-disc text-sm text-gray-600">
                 <?php foreach ($subtasks as $sub): ?>
@@ -41,7 +41,7 @@
               </ul>
             <?php endif; ?>
           </div>
-          <form method="POST" action="/delete" onsubmit="return confirm('Delete this task?');">
+          <form method="POST" action="/delete" onsubmit="return confirm('Excluir esta tarefa?');">
             <input type="hidden" name="id" value="<?= $task['id'] ?>">
             <button type="submit" class="text-red-600 text-sm hover:underline">Excluir</button>
           </form>
