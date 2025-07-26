@@ -1,3 +1,8 @@
+<?php
+use Src\Model\Task;
+$allTasks = Task::all();
+?>
+
 <section class="mb-8">
   <h2 class="text-xl font-semibold text-yellow-400 mb-4">Adicionar nova tarefa</h2>
   <form action="/store" method="POST" class="space-y-4">
