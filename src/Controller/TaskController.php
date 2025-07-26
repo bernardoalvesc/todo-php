@@ -6,16 +6,16 @@ use Src\Model\Task;
 
 class TaskController
 {
-    public function index($priority = null)
-    {
-        if ($priority) {
-            $tasks = Task::filterByPriority($priority);
-        } else {
-            $tasks = Task::all();
-        }
+  public function index($priorities = null)
+  {
+      if (!empty($priorities)) {
+          $tasks = \Src\Model\Task::filterByPriority($priorities);
+      } else {
+          $tasks = \Src\Model\Task::all();
+      }
 
-        require_once __DIR__ . '/../View/index.php';
-    }
+      require_once __DIR__ . '/../View/index.php';
+  }
 
     public function store()
     {

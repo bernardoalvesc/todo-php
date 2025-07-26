@@ -57,11 +57,14 @@ class Task
         $stmt->execute([$id]);
     }
 
-    public static function filterByPriority(string $priority): array
+    public static function filterByPriority(array $priorities): array
     {
         $pdo = Database::getConnection();
-        $stmt = $pdo->prepare("SELECT * FROM tasks WHERE priority = ? ORDER BY created_at DESC");
-        $stmt->execute([$priority]);
+        $placeholders = implode(',', array_fill(0, count($priorities), '?'));
+
+        $stmt = $pdo->prepare("SELECT * FROM tasks WHERE priority IN ($placeholders) ORDER BY created_at DESC");
+        $stmt->execute($priorities);
+
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 }

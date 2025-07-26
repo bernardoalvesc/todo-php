@@ -17,7 +17,32 @@
 
     <?php include __DIR__ . '/add.php'; ?>
 
-    <section>
+    <section class="mb-6">
+      <form method="GET" action="/" class="mb-6">
+        <div class="flex gap-4 flex-wrap items-center">
+          <label class="font-semibold text-gray-700">Filtrar por prioridade:</label>
+
+          <?php
+            $selected = $_GET['priority'] ?? [];
+            $options = ['high' => 'Alta', 'medium' => 'Média', 'low' => 'Baixa'];
+          ?>
+
+          <?php foreach ($options as $value => $label): ?>
+            <label class="inline-flex items-center gap-1">
+              <input type="checkbox" name="priority[]" value="<?= $value ?>"
+                <?= in_array($value, $selected) ? 'checked' : '' ?>
+                class="accent-yellow-400">
+              <?= $label ?>
+            </label>
+          <?php endforeach; ?>
+
+          <button type="submit"
+            class="ml-auto bg-yellow-400 text-white px-4 py-1 rounded hover:bg-yellow-500 transition">
+            Filtrar
+          </button>
+        </div>
+      </form>
+
       <h2 class="text-xl font-semibold text-yellow-400 mb-4">Lista de tarefas</h2>
       <ul class="space-y-4">
         <?php foreach ($tasks as $task): ?>
