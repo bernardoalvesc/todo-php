@@ -19,6 +19,8 @@
 - Estrutura de subtarefas aninhadas: agora é possível selecionar uma tarefa pai ao criar uma nova tarefa.
 - Interface atualizada para exibir listas aninhadas com TailwindCSS, representando a hierarquia entre tarefas e subtarefas.
 
+---
+
 ### ✅ 2025-07-25/26 - v0.3
 
 - Deixar a adição de itens de forma recursiva.
