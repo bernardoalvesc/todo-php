@@ -26,6 +26,11 @@ export default function Home() {
     }
   };
 
+  const handleDelete = async (id: number) => {
+    await fetch(`/api/tasks/${id}`, { method: "DELETE" });
+    fetchTasks();
+  };
+
   useEffect(() => {
     fetchTasks();
   }, []);
@@ -53,7 +58,7 @@ export default function Home() {
       ) : (
         <ul className="space-y-4">
           {filteredTasks.map((task) => (
-            <TaskCard key={task.id} task={task} />
+            <TaskCard key={task.id} task={task} onDelete={handleDelete} />
           ))}
         </ul>
       )}
