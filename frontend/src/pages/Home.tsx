@@ -18,12 +18,14 @@ export default function Home() {
 
   const fetchAll = async () => {
     setLoading(true);
-
     try {
       const [tasksRes, subtasksRes] = await Promise.all([
         fetch("/api/tasks"),
         fetch("/api/subtasks"),
       ]);
+
+      if (!tasksRes.ok || !subtasksRes.ok)
+        throw new Error("Alguma das requisições falhou");
 
       const tasksData: Task[] = await tasksRes.json();
       const subtasksData: Subtask[] = await subtasksRes.json();
@@ -32,6 +34,8 @@ export default function Home() {
       setSubtasks(subtasksData);
     } catch (err) {
       console.error("Erro ao buscar dados da API:", err);
+      setTasks([]);
+      setSubtasks([]);
     } finally {
       setLoading(false);
     }

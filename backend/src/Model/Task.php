@@ -50,6 +50,16 @@ class Task
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    public static function allSubtasks(): array
+    {
+        $pdo = Database::getConnection();
+        $stmt = $pdo->query("SELECT s.*, ts.task_id AS parent_id
+                             FROM subtasks s
+                             INNER JOIN task_subtask ts ON ts.subtask_id = s.id
+                             ORDER BY s.id DESC");
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
     public static function delete(int $id): void
     {
         $pdo = Database::getConnection();

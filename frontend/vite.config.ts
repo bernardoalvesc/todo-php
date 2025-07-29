@@ -1,3 +1,4 @@
+// vite.config.ts
 import { defineConfig } from "vite";
 import preact from "@preact/preset-vite";
 
@@ -8,7 +9,6 @@ export default defineConfig({
       "/api": {
         target: "http://localhost:8080",
         changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/api/, ""),
       },
     },
   },
