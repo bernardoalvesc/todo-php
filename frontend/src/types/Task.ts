@@ -3,4 +3,5 @@ export interface Task {
   title: string;
   description: string;
   priority: "low" | "medium" | "high";
+  created_at: string;
 }

@@ -1,55 +1,37 @@
 import { useEffect, useState } from "preact/hooks";
 import type { Task } from "../types/Task";
-import type { Subtask } from "../types/Subtask";
-
-import TaskCard from "../components/TaskCard";
 import TaskForm from "../components/TaskForm";
-import SubtaskForm from "../components/SubtaskForm";
+import TaskCard from "../components/TaskCard";
 import FilterBar from "../components/FilterBar";
-import SubtaskList from "../components/SubtaskList";
 
 export default function Home() {
   const [tasks, setTasks] = useState<Task[]>([]);
-  const [subtasks, setSubtasks] = useState<Subtask[]>([]);
   const [filter, setFilter] = useState<"all" | "low" | "medium" | "high">(
     "all"
   );
   const [loading, setLoading] = useState(true);
 
-  const fetchAll = async () => {
+  const fetchTasks = async () => {
     setLoading(true);
     try {
-      const [tasksRes, subtasksRes] = await Promise.all([
-        fetch("/api/tasks"),
-        fetch("/api/subtasks"),
-      ]);
-
-      if (!tasksRes.ok || !subtasksRes.ok)
-        throw new Error("Alguma das requisições falhou");
-
-      const tasksData: Task[] = await tasksRes.json();
-      const subtasksData: Subtask[] = await subtasksRes.json();
-
-      setTasks(tasksData);
-      setSubtasks(subtasksData);
+      const res = await fetch("/api/tasks");
+      if (!res.ok) throw new Error("Erro ao carregar tarefas");
+      const data = await res.json();
+      setTasks(data);
     } catch (err) {
-      console.error("Erro ao buscar dados da API:", err);
+      console.error(err);
       setTasks([]);
-      setSubtasks([]);
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    fetchAll();
+    fetchTasks();
   }, []);
 
   const filteredTasks =
     filter === "all" ? tasks : tasks.filter((t) => t.priority === filter);
-
-  const getSubtasksFor = (taskId: number) =>
-    subtasks.filter((s) => s.parent_id === taskId);
 
   return (
     <main className="max-w-2xl mx-auto px-4 py-8">
@@ -57,12 +39,7 @@ export default function Home() {
 
       <section className="mb-8">
         <h2 className="text-xl font-semibold mb-2">Criar nova tarefa</h2>
-        <TaskForm onTaskCreated={fetchAll} />
-      </section>
-
-      <section className="mb-8">
-        <h2 className="text-xl font-semibold mb-2">Adicionar subtarefa</h2>
-        <SubtaskForm tasks={tasks} onSubtaskCreated={fetchAll} />
+        <TaskForm onTaskCreated={fetchTasks} />
       </section>
 
       <section className="mb-4">
@@ -76,9 +53,7 @@ export default function Home() {
       ) : (
         <ul className="space-y-4">
           {filteredTasks.map((task) => (
-            <TaskCard key={task.id} task={task}>
-              <SubtaskList subtasks={getSubtasksFor(task.id)} />
-            </TaskCard>
+            <TaskCard key={task.id} task={task} />
           ))}
         </ul>
       )}
