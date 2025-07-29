@@ -28,3 +28,14 @@
 - Adição de um filtro de prioridade.
 - Padronizar as variáveis e funções para o inglês.
 - Transformação para o padrão MVC + POO.
+
+### ✅ 2025-07-29 - v0.4
+- Refatoração completa do front-end com Preact e TypeScript.
+- Tarefas agora são exibidas corretamente usando API externa.
+- Correção no TaskCard e no sistema de filtro.
+- Implementação da função de exclusão de tarefas pela interface.
+- Exibição das subtarefas aninhadas dentro de cada tarefa.
+- Correção do bug 404 nas rotas de subtarefas.
+- Ajuste no path de require no index.php para garantir carregamento da API corretamente no ambiente Docker.
+- Confirmação de funcionamento da hierarquia entre tarefas e subtarefas via API.
+- Nova UI.
