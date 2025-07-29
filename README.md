@@ -28,6 +28,8 @@
 - Adição de um filtro de prioridade.
 - Padronizar as variáveis e funções para o inglês.
 - Transformação para o padrão MVC + POO.
+ 
+---
 
 ### ✅ 2025-07-29 - v0.4
 - Refatoração completa do front-end com Preact e TypeScript.
