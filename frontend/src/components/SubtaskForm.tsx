@@ -31,11 +31,11 @@ export default function SubtaskForm({ tasks, onSubtaskCreated }: Props) {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-3 mb-6">
+    <form onSubmit={handleSubmit} className="space-y-4 mb-8 font-nunito">
       <select
         value={parentId ?? ""}
         onChange={(e) => setParentId(Number(e.currentTarget.value))}
-        className="w-full p-2 border rounded"
+        className="w-full p-3 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
         required
       >
         <option value="" disabled>
@@ -47,18 +47,20 @@ export default function SubtaskForm({ tasks, onSubtaskCreated }: Props) {
           </option>
         ))}
       </select>
+
       <input
-        className="w-full p-2 border rounded"
+        className="w-full p-3 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
         placeholder="Título da subtarefa"
         value={title}
         onInput={(e) => setTitle((e.target as HTMLInputElement).value)}
         required
       />
+
       <button
         type="submit"
-        className="bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-700"
+        className="bg-purple-600 hover:bg-purple-700 transition text-white font-semibold px-5 py-2 rounded-lg shadow"
       >
-        Adicionar Subtarefa
+        ➕ Adicionar Subtarefa
       </button>
     </form>
   );
