@@ -14,7 +14,10 @@ if ($uri === '/' && $method === 'GET') {
     $controller->store();
 } elseif ($uri === '/delete' && $method === 'POST') {
     $controller->destroy();
-} else {
+}elseif (strpos($uri, '/api/tasks') === 0) {
+        require_once __DIR__ . '/Api/api_routes.php';
+}else {
     http_response_code(404);
     echo "404 Not Found";
 }
+

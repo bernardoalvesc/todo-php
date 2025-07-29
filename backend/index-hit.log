@@ -1,0 +1,5 @@
+{
+    "uri": "\/api\/subtasks",
+    "script": "\/index.php",
+    "method": "GET"
+}
