@@ -7,11 +7,20 @@ header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: GET, POST, DELETE, OPTIONS');
 header('Access-Control-Allow-Headers: Content-Type');
 
+// Normaliza a URI (em caso de prefixo como /index.php/api/...)
 $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 $method = $_SERVER['REQUEST_METHOD'];
+$cleanUri = str_replace('/index.php', '', $uri);
+
+// Log temporário para debug
+file_put_contents(__DIR__ . '/log_uri.txt', json_encode([
+    'REQUEST_URI' => $_SERVER['REQUEST_URI'],
+    'cleanUri' => $cleanUri,
+    'method' => $method
+], JSON_PRETTY_PRINT));
 
 // === GET /api/tasks
-if ($uri === '/api/tasks' && $method === 'GET') {
+if ($cleanUri === '/api/tasks' && $method === 'GET') {
     $priorities = $_GET['priority'] ?? [];
     if (!empty($priorities)) {
         echo json_encode(Task::filterByPriority($priorities));
@@ -20,7 +29,7 @@ if ($uri === '/api/tasks' && $method === 'GET') {
     }
 
 // === POST /api/tasks
-} elseif ($uri === '/api/tasks' && $method === 'POST') {
+} elseif ($cleanUri === '/api/tasks' && $method === 'POST') {
     $data = json_decode(file_get_contents("php://input"), true);
     $isSubtask = !empty($data['parent_id']);
     Task::create($data, $isSubtask);
@@ -28,13 +37,13 @@ if ($uri === '/api/tasks' && $method === 'GET') {
     echo json_encode(['message' => 'Task created']);
 
 // === DELETE /api/tasks/{id}
-} elseif (preg_match('#^/api/tasks/(\d+)$#', $uri, $matches) && $method === 'DELETE') {
+} elseif (preg_match('#^/api/tasks/(\d+)$#', $cleanUri, $matches) && $method === 'DELETE') {
     $id = $matches[1];
     Task::delete($id);
     echo json_encode(['message' => 'Task deleted']);
 
 // === GET /api/subtasks
-} elseif ($uri === '/api/subtasks' && $method === 'GET') {
+} elseif (rtrim($cleanUri, '/') === '/api/subtasks' && $method === 'GET') {
     echo json_encode(Task::allSubtasks());
 
 // === OPTIONS (preflight)

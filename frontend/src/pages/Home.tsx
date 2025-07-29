@@ -1,26 +1,38 @@
 import { useEffect, useState } from "preact/hooks";
 import type { Task } from "../types/Task";
+import type { Subtask } from "../types/Subtask";
 import TaskForm from "../components/TaskForm";
 import TaskCard from "../components/TaskCard";
 import FilterBar from "../components/FilterBar";
 
 export default function Home() {
   const [tasks, setTasks] = useState<Task[]>([]);
+  const [subtasks, setSubtasks] = useState<Subtask[]>([]);
   const [filter, setFilter] = useState<"all" | "low" | "medium" | "high">(
     "all"
   );
   const [loading, setLoading] = useState(true);
 
-  const fetchTasks = async () => {
+  const fetchAll = async () => {
     setLoading(true);
     try {
-      const res = await fetch("/api/tasks");
-      if (!res.ok) throw new Error("Erro ao carregar tarefas");
-      const data = await res.json();
-      setTasks(data);
+      const [taskRes, subtaskRes] = await Promise.all([
+        fetch("/api/tasks"),
+        fetch("/api/subtasks"),
+      ]);
+
+      if (!taskRes.ok || !subtaskRes.ok)
+        throw new Error("Erro ao carregar dados");
+
+      const taskData: Task[] = await taskRes.json();
+      const subtaskData: Subtask[] = await subtaskRes.json();
+
+      setTasks(taskData);
+      setSubtasks(subtaskData);
     } catch (err) {
       console.error(err);
       setTasks([]);
+      setSubtasks([]);
     } finally {
       setLoading(false);
     }
@@ -28,11 +40,14 @@ export default function Home() {
 
   const handleDelete = async (id: number) => {
     await fetch(`/api/tasks/${id}`, { method: "DELETE" });
-    fetchTasks();
+    fetchAll();
   };
 
+  const getSubtasksFor = (taskId: number) =>
+    subtasks.filter((s) => s.parent_id === taskId);
+
   useEffect(() => {
-    fetchTasks();
+    fetchAll();
   }, []);
 
   const filteredTasks =
@@ -44,7 +59,7 @@ export default function Home() {
 
       <section className="mb-8">
         <h2 className="text-xl font-semibold mb-2">Criar nova tarefa</h2>
-        <TaskForm onTaskCreated={fetchTasks} />
+        <TaskForm onTaskCreated={fetchAll} />
       </section>
 
       <section className="mb-4">
@@ -58,7 +73,13 @@ export default function Home() {
       ) : (
         <ul className="space-y-4">
           {filteredTasks.map((task) => (
-            <TaskCard key={task.id} task={task} onDelete={handleDelete} />
+            <TaskCard
+              key={task.id}
+              task={task}
+              onDelete={handleDelete}
+              onSubtaskCreated={fetchAll}
+              subtasks={getSubtasksFor(task.id)}
+            />
           ))}
         </ul>
       )}
