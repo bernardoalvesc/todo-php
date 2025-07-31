@@ -1,5 +1,5 @@
-import { FILTER_OPTIONS } from "./filterOptions";
-import type { FilterBarProps } from "./types"; //  garantir que a tipagem será removida após o build, otimizando a saída e evitando conflitos.
+import { FILTER_OPTIONS } from ".";
+import type { FilterBarProps } from "./filterBar.types"; //  garantir que a tipagem será removida após o build, otimizando a saída e evitando conflitos.
 
 export default function FilterBar({ selected, onChange }: FilterBarProps) {
   return (
