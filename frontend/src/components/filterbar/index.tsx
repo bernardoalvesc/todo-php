@@ -1,20 +1,10 @@
-interface Props {
-  selected: string;
-  onChange: (filter: "all" | "low" | "medium" | "high") => void;
-}
+import { FILTER_OPTIONS } from "./filterOptions";
+import type { FilterBarProps } from "./types"; //  garantir que a tipagem será removida após o build, otimizando a saída e evitando conflitos.
 
-export default function FilterBar({ selected, onChange }: Props) {
-  const options: { label: string; value: "all" | "high" | "medium" | "low" }[] =
-    [
-      { label: "Todas", value: "all" },
-      { label: "Alta", value: "high" },
-      { label: "Média", value: "medium" },
-      { label: "Baixa", value: "low" },
-    ];
-
+export default function FilterBar({ selected, onChange }: FilterBarProps) {
   return (
     <div className="flex flex-wrap gap-2 mb-6 font-nunito justify-center">
-      {options.map((opt) => {
+      {FILTER_OPTIONS.map((opt) => {
         const isSelected = selected === opt.value;
         return (
           <button

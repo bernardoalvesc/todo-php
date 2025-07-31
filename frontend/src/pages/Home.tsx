@@ -4,7 +4,7 @@ import type { Subtask } from "../types/Subtask";
 import TaskForm from "../components/TaskForm";
 import TaskCard from "../components/TaskCard";
 import FilterBar from "../components/FilterBar";
-import Footer from "../components/Footer"; 
+import Footer from "../components/Footer";
 
 export default function Home() {
   const [tasks, setTasks] = useState<Task[]>([]);
