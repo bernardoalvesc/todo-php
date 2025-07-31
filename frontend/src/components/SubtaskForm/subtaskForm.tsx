@@ -1,12 +1,10 @@
 import { useState } from "preact/hooks";
-import type { Task } from "../types/Task";
+import type { SubtaskFormProps } from "./subtaskForm.types";
 
-type Props = {
-  tasks: Task[];
-  onSubtaskCreated: () => void;
-};
-
-export default function SubtaskForm({ tasks, onSubtaskCreated }: Props) {
+export default function SubtaskForm({
+  tasks,
+  onSubtaskCreated,
+}: SubtaskFormProps) {
   const [title, setTitle] = useState("");
   const [parentId, setParentId] = useState<number | null>(null);
 
