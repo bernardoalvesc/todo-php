@@ -2,9 +2,8 @@ import { useEffect, useState } from "preact/hooks";
 import type { Task } from "../types/Task";
 import type { Subtask } from "../types/Subtask";
 import TaskForm from "../components/TaskForm";
-import TaskCard from "../components/TaskCard";
+import TaskCard from "../components/TaskCard/taskCard";
 import FilterBar from "../components/FilterBar/filterBar";
-import Footer from "../components/Footer";
 
 export default function Home() {
   const [tasks, setTasks] = useState<Task[]>([]);
@@ -92,8 +91,6 @@ export default function Home() {
           </ul>
         )}
       </main>
-
-      <Footer />
     </>
   );
 }

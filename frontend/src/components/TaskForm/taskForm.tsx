@@ -1,28 +1,19 @@
-import { useState } from "preact/hooks";
+import { useTaskForm } from "./useTaskForm";
 
 interface Props {
   onTaskCreated: () => void;
 }
 
 export default function TaskForm({ onTaskCreated }: Props) {
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
-  const [priority, setPriority] = useState("low");
-
-  const handleSubmit = async (e: Event) => {
-    e.preventDefault();
-
-    await fetch("/api/tasks", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ title, description, priority }),
-    });
-
-    setTitle("");
-    setDescription("");
-    setPriority("low");
-    onTaskCreated();
-  };
+  const {
+    title,
+    description,
+    priority,
+    setTitle,
+    setDescription,
+    setPriority,
+    handleSubmit,
+  } = useTaskForm(onTaskCreated);
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4 mb-8 font-nunito">
@@ -38,13 +29,17 @@ export default function TaskForm({ onTaskCreated }: Props) {
         className="w-full border p-3 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
         placeholder="Descrição da tarefa"
         value={description}
-        onInput={(e) => setDescription((e.target as HTMLTextAreaElement).value)}
+        onInput={(e) =>
+          setDescription((e.target as HTMLTextAreaElement).value)
+        }
       />
 
       <select
         className="w-full border p-3 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
         value={priority}
-        onChange={(e) => setPriority((e.target as HTMLSelectElement).value)}
+        onChange={(e) =>
+          setPriority((e.target as HTMLSelectElement).value)
+        }
       >
         <option value="low">Baixa</option>
         <option value="medium">Média</option>
