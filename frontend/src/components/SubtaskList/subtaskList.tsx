@@ -1,10 +1,6 @@
-import type { Subtask } from "../types/Subtask.ts";
+import type { SubtaskListProps } from "./subtaskList.types";
 
-type Props = {
-  subtasks: Subtask[];
-};
-
-export default function SubtaskList({ subtasks }: Props) {
+export default function SubtaskList({ subtasks }: SubtaskListProps) {
   if (subtasks.length === 0) return null;
 
   return (
