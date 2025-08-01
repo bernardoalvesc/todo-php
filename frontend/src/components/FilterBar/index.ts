@@ -4,6 +4,6 @@ export const FILTER_OPTIONS: {
 }[] = [
   { label: "Todas", value: "all" },
   { label: "Alta", value: "high" },
-  { label: "Mpedia", value: "medium" },
+  { label: "Media", value: "medium" },
   { label: "Baixa", value: "low" },
 ];

@@ -1,16 +1,19 @@
-import { useEffect, useState } from "preact/hooks";
+import { useTaskContext } from "../../context/taskContext";
 import TaskForm from "../../components/TaskForm";
 import TaskCard from "../../components/TaskCard/taskCard";
 import FilterBar from "../../components/FilterBar/filterBar";
-import { useTasks } from "./hooks/useTasks";
 import { getSubtasksFor } from "./utils/getSubtasksFor";
-import type { Task, Subtask, Priority } from "../../types";
 
 export default function Home() {
-  const { tasks, subtasks, loading, fetchAll, handleDelete } = useTasks();
-  const [filter, setFilter] = useState<"all" | "low" | "medium" | "high">(
-    "all"
-  );
+  const {
+    tasks,
+    subtasks,
+    loading,
+    fetchAll,
+    handleDelete,
+    filter,
+    setFilter,
+  } = useTaskContext(); 
 
   const filteredTasks =
     filter === "all" ? tasks : tasks.filter((t) => t.priority === filter);
