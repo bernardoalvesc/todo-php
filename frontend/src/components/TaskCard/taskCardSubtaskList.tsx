@@ -1,3 +1,4 @@
+import React from "preact/compat";
 import type { Subtask } from "../../types/index";
 
 /**

@@ -1,5 +1,6 @@
 import { useState } from "preact/hooks";
 import type { SubtaskFormProps } from "./subtaskForm.types";
+import React from "preact/compat";
 
 /**
  * SubtaskForm component allows users to create a new subtask

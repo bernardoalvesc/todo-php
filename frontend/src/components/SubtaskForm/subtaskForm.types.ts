@@ -1,6 +1,3 @@
-// Import Task type definition from the shared types
-import type { Task } from "../../types/index";
-
 /**
  * Props for the SubtaskForm component.
  */

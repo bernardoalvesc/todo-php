@@ -1,4 +1,5 @@
-import { useTaskForm } from "./Hooks/useTaskForm";
+import React from "preact/compat";
+import { useTaskForm } from "./useTaskForm.ts";
 
 /**
  * Props for the TaskForm component.
