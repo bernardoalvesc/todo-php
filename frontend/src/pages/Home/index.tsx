@@ -4,6 +4,11 @@ import TaskCard from "../../components/TaskCard/taskCard";
 import FilterBar from "../../components/FilterBar/filterBar";
 import { getSubtasksFor } from "./utils/getSubtasksFor";
 
+/**
+ * Home component serves as the main view for the to-do list.
+ * It displays a form to create tasks, a filter bar, and the list of filtered tasks.
+ * It uses TaskContext to manage and access global task state.
+ */
 export default function Home() {
   const {
     tasks,
@@ -13,8 +18,9 @@ export default function Home() {
     handleDelete,
     filter,
     setFilter,
-  } = useTaskContext(); 
+  } = useTaskContext();
 
+  // Filters tasks based on the currently selected priority
   const filteredTasks =
     filter === "all" ? tasks : tasks.filter((t) => t.priority === filter);
 
@@ -24,23 +30,24 @@ export default function Home() {
         📝 To do List
       </h1>
 
+      {/* Section to create a new task */}
       <section className="mb-10">
         <h2 className="text-xl font-semibold mb-3 text-blue-700">
-          ➕ Criar nova tarefa
+          ➕ Create new task
         </h2>
         <TaskForm onTaskCreated={fetchAll} />
       </section>
 
+      {/* Filter buttons for priority */}
       <section className="mb-6">
         <FilterBar selected={filter} onChange={setFilter} />
       </section>
 
+      {/* Display loading, empty state, or the filtered task list */}
       {loading ? (
-        <p className="text-gray-500 text-center">⏳ Carregando tarefas...</p>
+        <p className="text-gray-500 text-center">⏳ Loading tasks...</p>
       ) : filteredTasks.length === 0 ? (
-        <p className="text-gray-500 text-center">
-          📭 Nenhuma tarefa encontrada.
-        </p>
+        <p className="text-gray-500 text-center">📭 No tasks found.</p>
       ) : (
         <ul className="space-y-5">
           {filteredTasks.map((task) => (
