@@ -1,7 +1,8 @@
-import { useTaskContext } from "../../context/taskContext";
-import TaskForm from "../../components/TaskForm";
-import TaskCard from "../../components/TaskCard/taskCard";
+import { TaskCard, TaskForm } from "../../components/";
 import FilterBar from "../../components/FilterBar/filterBar";
+
+import { getSubtasksFor } from "./utils/getSubtasksFor";
+import { useHome } from "./useHome.ts";
 import React from "preact/compat";
 
 /**
@@ -10,8 +11,15 @@ import React from "preact/compat";
  * It uses TaskContext to manage and access global task state.
  */
 export default function Home() {
-  const { tasks, loading, fetchAll, handleDelete, filter, setFilter } =
-    useTaskContext();
+  const {
+    tasks,
+    subtasks,
+    loading,
+    fetchAll,
+    handleDelete,
+    filter,
+    setFilter,
+  } = useHome();
 
   // Filters tasks based on the currently selected priority
   const filteredTasks =
@@ -49,7 +57,7 @@ export default function Home() {
               task={task}
               onDelete={handleDelete}
               onSubtaskCreated={fetchAll}
-              subtasks={task.subtasks} // tratado
+              subtasks={getSubtasksFor(task.id, subtasks)}
             />
           ))}
         </ul>

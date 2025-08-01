@@ -1,4 +1,5 @@
 // Imports the available filter options (e.g., "all", "low", "medium", "high")
+import React from "preact/compat";
 import { FILTER_OPTIONS } from ".";
 
 // Imports the prop types (used only at compile time for better DX and tree-shaking)

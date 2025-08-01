@@ -1,11 +1,6 @@
 import { render } from "preact";
 import App from "./app";
 import "./index.css";
-import { TaskProvider } from "./context/taskContext";
+import React from "preact/compat";
 
-render(
-  <TaskProvider>
-    <App />
-  </TaskProvider>,
-  document.getElementById("app")!
-);
+render(<App />, document.getElementById("app")!);

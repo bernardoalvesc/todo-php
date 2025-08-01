@@ -1,5 +1,13 @@
-import Home from "../src/pages/Home";
+import React from "preact/compat";
+import ContextsWrapper from "./components/ContextsWrapper";
+import Home from "./pages/Home/home";
 
 export default function App() {
-  return <Home />;
+  return (
+    <>
+      <ContextsWrapper>
+        <Home />
+      </ContextsWrapper>
+    </>
+  );
 }

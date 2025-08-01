@@ -1,63 +1,29 @@
-import React from "preact/compat";
 import { useState } from "preact/hooks";
-
-/**
- * Props for the TaskCardSubtaskForm component.
- */
-type Props = {
-  /**
-   * The ID of the parent task to which the subtask will be linked.
-   */
-  taskId: number;
-
-  /**
-   * Callback function to trigger after a subtask is successfully created.
-   */
-  onSubtaskCreated: () => void;
-};
+import { useTaskCardSubtaskForm } from "./useTaskCardSubtaskForm.ts";
+import React from "preact/compat";
 
 /**
  * TaskCardSubtaskForm renders a small form inside the TaskCard to allow
  * creating a subtask with title, description, and priority.
  */
+type Props = {
+  taskId: number;
+  onSubtaskCreated: () => void;
+};
+
 export default function TaskCardSubtaskForm({
   taskId,
   onSubtaskCreated,
 }: Props) {
-  // State for the subtask's title input
-  const [title, setTitle] = useState("");
-
-  // State for the subtask's description input
-  const [description, setDescription] = useState("");
-
-  // State for the subtask's priority selection
-  const [priority, setPriority] = useState("low");
-
-  /**
-   * Handles form submission by sending a POST request to create a new subtask.
-   */
-  const handleSubmit = async (e: Event) => {
-    e.preventDefault();
-
-    await fetch("/api/tasks", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        title,
-        description,
-        priority,
-        parent_id: taskId,
-      }),
-    });
-
-    // Reset form fields after successful creation
-    setTitle("");
-    setDescription("");
-    setPriority("low");
-
-    // Trigger the parent callback to refresh the task list
-    onSubtaskCreated();
-  };
+  const {
+    handleSubmit,
+    title,
+    setTitle,
+    description,
+    setDescription,
+    priority,
+    setPriority,
+  } = useTaskCardSubtaskForm({ taskId, onSubtaskCreated });
 
   return (
     <form
@@ -66,7 +32,6 @@ export default function TaskCardSubtaskForm({
     >
       <h4 className="text-sm font-semibold">Add Subtask</h4>
 
-      {/* Title input field */}
       <input
         type="text"
         placeholder="Title"
@@ -76,7 +41,6 @@ export default function TaskCardSubtaskForm({
         required
       />
 
-      {/* Description textarea */}
       <textarea
         placeholder="Description"
         value={description}
@@ -84,7 +48,6 @@ export default function TaskCardSubtaskForm({
         className="w-full p-2 border rounded-md shadow-sm text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
       />
 
-      {/* Priority selector */}
       <select
         value={priority}
         onChange={(e) => setPriority((e.target as HTMLSelectElement).value)}
@@ -95,7 +58,6 @@ export default function TaskCardSubtaskForm({
         <option value="high">High</option>
       </select>
 
-      {/* Submit button */}
       <button
         type="submit"
         className="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-4 py-2 rounded transition"
